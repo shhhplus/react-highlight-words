@@ -11,7 +11,7 @@ import clearDeclaration from './plugin-clear-declaration';
 import createPackageJson from './plugin-create-package-json';
 
 const packageinfo = JSON.parse(
-  fs.readFileSync(new URL('../package.json', import.meta.url)).toString(),
+  fs.readFileSync(new URL('../package.json', import.meta.url), 'utf8'),
 );
 
 export default {
@@ -20,14 +20,14 @@ export default {
     file: './dist/index.js',
     format: 'cjs',
   },
-  external: Object.keys(packageinfo['dependencies']),
+  external: [...Object.keys(packageinfo['dependencies']), 'react/jsx-runtime'],
   plugins: [
     commonjs(),
     del({
       targets: './dist',
     }),
     resolve(),
-    typescript({}),
+    typescript(),
     babel({
       babelHelpers: 'bundled',
     }),
