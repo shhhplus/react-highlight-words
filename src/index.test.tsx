@@ -1,29 +1,38 @@
 import { render } from '@testing-library/react';
-import KeywordsHighlight from './index';
+import HighlightWords from './index';
 
 test(`component could be updated and unmounted without errors`, () => {
   const text = 'Welcome everyone to come and join my birthday party.';
   const { unmount, rerender } = render(
-    <KeywordsHighlight keywords="birthday" style={{ color: 'greenyellow' }}>
+    <HighlightWords
+      words="birthday"
+      render={(word) => <span style={{ color: 'greenyellow' }}>{word}</span>}
+    >
       {text}
-    </KeywordsHighlight>,
+    </HighlightWords>,
   );
   expect(() => {
     rerender(
-      <KeywordsHighlight keywords="party" style={{ color: 'red' }}>
+      <HighlightWords
+        words="party"
+        render={(word) => <span style={{ color: 'red' }}>{word}</span>}
+      >
         {text}
-      </KeywordsHighlight>,
+      </HighlightWords>,
     );
     unmount();
   }).not.toThrow();
 });
 
-test(`a single matched word should works`, () => {
+test(`single matched should works`, () => {
   const text = 'Welcome everyone to come and join my birthday party.';
   const { container } = render(
-    <KeywordsHighlight keywords="birthday" style={{ color: 'red' }}>
+    <HighlightWords
+      words="birthday"
+      render={(word) => <span style={{ color: 'red' }}>{word}</span>}
+    >
       {text}
-    </KeywordsHighlight>,
+    </HighlightWords>,
   );
 
   expect(container.innerHTML).toEqual(
@@ -31,13 +40,16 @@ test(`a single matched word should works`, () => {
   );
 });
 
-test(`multiple matched words should works`, () => {
+test(`multiple matched should works`, () => {
   const text =
     'hi, party time. Welcome everyone to come and join my birthday party.';
   const { container } = render(
-    <KeywordsHighlight keywords="party" style={{ color: 'red' }}>
+    <HighlightWords
+      words="party"
+      render={(word) => <span style={{ color: 'red' }}>{word}</span>}
+    >
       {text}
-    </KeywordsHighlight>,
+    </HighlightWords>,
   );
 
   expect(container.innerHTML).toEqual(
@@ -45,12 +57,15 @@ test(`multiple matched words should works`, () => {
   );
 });
 
-test('empty keywords should works', () => {
+test('empty words should works', () => {
   const text = 'Welcome everyone to come and join my birthday party.';
   const { container } = render(
-    <KeywordsHighlight keywords="" style={{ color: 'red' }}>
+    <HighlightWords
+      words=""
+      render={(word) => <span style={{ color: 'red' }}>{word}</span>}
+    >
       {text}
-    </KeywordsHighlight>,
+    </HighlightWords>,
   );
 
   expect(container.innerHTML).toEqual(text);
@@ -58,18 +73,35 @@ test('empty keywords should works', () => {
 
 test(`component should update when props changes`, () => {
   const { container, rerender } = render(
-    <KeywordsHighlight keywords="nothing" style={{ color: 'green' }}>
+    <HighlightWords
+      words="nothing"
+      render={(word) => <span style={{ color: 'green' }}>{word}</span>}
+    >
       hello, everyone.
-    </KeywordsHighlight>,
+    </HighlightWords>,
   );
 
   rerender(
-    <KeywordsHighlight keywords="birthday" style={{ color: 'red' }}>
+    <HighlightWords
+      words="birthday"
+      render={(word) => <span style={{ color: 'red' }}>{word}</span>}
+    >
       Welcome everyone to come and join my birthday party.
-    </KeywordsHighlight>,
+    </HighlightWords>,
   );
 
   expect(container.innerHTML).toEqual(
     `Welcome everyone to come and join my <span style="color: red;">birthday</span> party.`,
+  );
+});
+
+test('no render props should works', () => {
+  const text = 'Welcome everyone to come and join my birthday party.';
+  const { container } = render(
+    <HighlightWords words="birthday">{text}</HighlightWords>,
+  );
+
+  expect(container.innerHTML).toEqual(
+    `Welcome everyone to come and join my <mark>birthday</mark> party.`,
   );
 });

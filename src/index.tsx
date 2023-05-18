@@ -1,31 +1,32 @@
-import { CSSProperties, FC, Fragment, useMemo } from 'react';
+import { FC, Fragment, ReactNode, useCallback, useMemo } from 'react';
 import compile from './compile';
 
-const defaultStyle = {
-  color: '#00BC70',
-};
-
-type KeywordsHighlightProps = {
-  keywords: string;
-  style?: CSSProperties;
+type HighlightWordsProps = {
+  words: string;
   children: string;
+  render?: (keyword: string) => ReactNode;
 };
 
-const KeywordsHighlight: FC<KeywordsHighlightProps> = ({
-  keywords,
-  style = defaultStyle,
+const HighlightWords: FC<HighlightWordsProps> = ({
+  words,
   children,
+  render,
 }) => {
-  const nodes = useMemo(() => {
-    return compile(children, keywords);
-  }, [children, keywords]);
+  const nodes = useMemo(() => compile(children, words), [children, words]);
+
+  const realRender = useCallback(
+    (word: string) => {
+      return render ? render(word) : <mark>{word}</mark>;
+    },
+    [render],
+  );
 
   return (
     <Fragment>
       {nodes.map((node, idx) => {
         return (
           <Fragment key={idx}>
-            {node.matched ? <span style={style}>{node.text}</span> : node.text}
+            {typeof node === 'string' ? node : realRender(node.text)}
           </Fragment>
         );
       })}
@@ -33,4 +34,4 @@ const KeywordsHighlight: FC<KeywordsHighlightProps> = ({
   );
 };
 
-export default KeywordsHighlight;
+export default HighlightWords;
