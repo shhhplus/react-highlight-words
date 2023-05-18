@@ -18,7 +18,7 @@ test(`component could be updated and unmounted without errors`, () => {
   }).not.toThrow();
 });
 
-test(`a single matching word should be highlighted.`, () => {
+test(`a single matched word should works`, () => {
   const text = 'Welcome everyone to come and join my birthday party.';
   const { container } = render(
     <KeywordsHighlight keywords="birthday" style={{ color: 'red' }}>
@@ -31,7 +31,7 @@ test(`a single matching word should be highlighted.`, () => {
   );
 });
 
-test(`multiple matching words should be highlighted`, () => {
+test(`multiple matched words should works`, () => {
   const text =
     'hi, party time. Welcome everyone to come and join my birthday party.';
   const { container } = render(
@@ -42,5 +42,34 @@ test(`multiple matching words should be highlighted`, () => {
 
   expect(container.innerHTML).toEqual(
     `hi, <span style="color: red;">party</span> time. Welcome everyone to come and join my birthday <span style="color: red;">party</span>.`,
+  );
+});
+
+test('empty keywords should works', () => {
+  const text = 'Welcome everyone to come and join my birthday party.';
+  const { container } = render(
+    <KeywordsHighlight keywords="" style={{ color: 'red' }}>
+      {text}
+    </KeywordsHighlight>,
+  );
+
+  expect(container.innerHTML).toEqual(text);
+});
+
+test(`component should update when props changes`, () => {
+  const { container, rerender } = render(
+    <KeywordsHighlight keywords="nothing" style={{ color: 'green' }}>
+      hello, everyone.
+    </KeywordsHighlight>,
+  );
+
+  rerender(
+    <KeywordsHighlight keywords="birthday" style={{ color: 'red' }}>
+      Welcome everyone to come and join my birthday party.
+    </KeywordsHighlight>,
+  );
+
+  expect(container.innerHTML).toEqual(
+    `Welcome everyone to come and join my <span style="color: red;">birthday</span> party.`,
   );
 });

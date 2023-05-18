@@ -1,4 +1,5 @@
-import { CSSProperties, FC, Fragment } from 'react';
+import { CSSProperties, FC, Fragment, useMemo } from 'react';
+import compile from './compile';
 
 const defaultStyle = {
   color: '#00BC70',
@@ -15,12 +16,16 @@ const KeywordsHighlight: FC<KeywordsHighlightProps> = ({
   style = defaultStyle,
   children,
 }) => {
+  const nodes = useMemo(() => {
+    return compile(children, keywords);
+  }, [children, keywords]);
+
   return (
     <Fragment>
-      {split(children, keywords).map((text, idx) => {
+      {nodes.map((node, idx) => {
         return (
           <Fragment key={idx}>
-            {text === keywords ? <span style={style}>{text}</span> : text}
+            {node.matched ? <span style={style}>{node.text}</span> : node.text}
           </Fragment>
         );
       })}
@@ -29,15 +34,3 @@ const KeywordsHighlight: FC<KeywordsHighlightProps> = ({
 };
 
 export default KeywordsHighlight;
-
-const split = (content: string, keywords: string) => {
-  return content
-    .split(keywords)
-    .reduce((acc: string[], cur, idx) => {
-      if (idx === 0) {
-        return [...acc, cur];
-      }
-      return [...acc, keywords, cur];
-    }, [])
-    .filter((text) => text.length);
-};
