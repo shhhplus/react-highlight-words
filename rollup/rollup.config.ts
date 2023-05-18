@@ -61,7 +61,7 @@ export default {
         ],
       },
       extra: {
-        name: '@shhhplus/react-keywords-highlight',
+        name: '@shhhplus/react-highlight-words',
         main: './index.js',
         types: './types/index.d.ts',
       },

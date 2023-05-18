@@ -1,12 +1,12 @@
 {
-  "name": "react-keywords-highlight",
-  "version": "1.0.3",
-  "description": "A component that can highlight matching keywords with customizable styles.",
+  "name": "react-highlight-words",
+  "version": "2.0.0",
+  "description": "A component that can highlight matching words with customizable styles.",
   "keywords": [
     "react",
     "component",
-    "keywords",
-    "highlight"
+    "highlight",
+    "keywords"
   ],
   "main": "./src/index.js",
   "scripts": {
@@ -15,14 +15,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/shhhplus/react-keywords-highlight.git"
+    "url": "https://github.com/shhhplus/react-highlight-words.git"
   },
   "author": "shhhplus",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/shhhplus/react-keywords-highlight/issues"
+    "url": "https://github.com/shhhplus/react-highlight-words/issues"
   },
-  "homepage": "https://github.com/shhhplus/react-keywords-highlight",
+  "homepage": "https://github.com/shhhplus/react-highlight-words",
   "devDependencies": {
     "@babel/core": "^7.21.8",
     "@babel/preset-env": "^7.21.5",
