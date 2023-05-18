@@ -1,7 +1,7 @@
 {
   "name": "react-highlight-words",
   "version": "2.0.0",
-  "description": "A component that can highlight matching words with customizable styles.",
+  "description": "A component that can highlight matching words with customizable style.",
   "keywords": [
     "react",
     "component",
