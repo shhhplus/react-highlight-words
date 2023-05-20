@@ -5,12 +5,12 @@ type Options = {
   dist: string;
   basic: {
     data: {
-      [P in string]: any;
+      [P in string]: unknown;
     };
     keys: string[];
   };
   extra: {
-    [P in string]: any;
+    [P in string]: unknown;
   };
 };
 

@@ -15,7 +15,7 @@ export default ({ folder, requirements }: Options) => {
 
       fs.mkdirSync(tempFolder);
 
-      for (let filePath of requirements) {
+      for (const filePath of requirements) {
         const obj = path.parse(filePath);
         fs.copyFileSync(
           path.join(folder, filePath),

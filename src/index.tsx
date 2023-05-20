@@ -1,37 +1,44 @@
-import { FC, Fragment, ReactNode, useCallback, useMemo } from 'react';
-import compile from './compile';
+import { CSSProperties, FC, useMemo } from 'react';
+import TextMatcher from '@shhhplus/react-text-matcher';
 
 type HighlightWordsProps = {
-  words: string;
+  words: string | string[];
+  style?: CSSProperties;
   children: string;
-  render?: (keyword: string) => ReactNode;
 };
 
-const HighlightWords: FC<HighlightWordsProps> = ({
+let _globalStyle: CSSProperties | undefined = undefined;
+
+const HighlightWordsInner: FC<HighlightWordsProps> = ({
   words,
+  style,
   children,
-  render,
 }) => {
-  const nodes = useMemo(() => compile(children, words), [children, words]);
+  const rules = useMemo(() => {
+    const style2use = style || _globalStyle;
+    if (!style2use) {
+      return [];
+    }
 
-  const realRender = useCallback(
-    (word: string) => {
-      return render ? render(word) : <mark>{word}</mark>;
-    },
-    [render],
-  );
+    const list = typeof words === 'string' ? [words] : words;
+    return list.map((word) => {
+      return {
+        pattern: word,
+        render: (word: string) => {
+          return <mark style={style2use}>{word}</mark>;
+        },
+      };
+    });
+  }, [words, style]);
 
-  return (
-    <Fragment>
-      {nodes.map((node, idx) => {
-        return (
-          <Fragment key={idx}>
-            {typeof node === 'string' ? node : realRender(node.text)}
-          </Fragment>
-        );
-      })}
-    </Fragment>
-  );
+  return <TextMatcher rules={rules}>{children}</TextMatcher>;
+};
+
+const HighlightWords = HighlightWordsInner as typeof HighlightWordsInner & {
+  config: (globalStyle: CSSProperties) => void;
+};
+HighlightWords.config = (globalStyle) => {
+  _globalStyle = globalStyle;
 };
 
 export default HighlightWords;
