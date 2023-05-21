@@ -78,7 +78,10 @@ describe('HighlightWords', () => {
   test('multi words should works', () => {
     const text = 'AppleTodayFoodHappySunFood';
     const { container } = render(
-      <HighlightWords words={['Food', 'Apple']} style={{ color: 'red' }}>
+      <HighlightWords
+        words={['Food', new RegExp('Apple')]}
+        style={{ color: 'red' }}
+      >
         {text}
       </HighlightWords>,
     );
