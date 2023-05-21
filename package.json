@@ -1,6 +1,6 @@
 {
   "name": "react-highlight-words",
-  "version": "3.0.0",
+  "version": "3.0.1",
   "description": "A component that can highlight words in the text with custom styles.",
   "keywords": [
     "react",
@@ -56,7 +56,7 @@
     "typescript": "^5.0.4"
   },
   "dependencies": {
-    "@shhhplus/react-text-matcher": "^1.0.0",
+    "@shhhplus/react-text-matcher": "^2.0.1",
     "react": "^18.0.0"
   }
 }

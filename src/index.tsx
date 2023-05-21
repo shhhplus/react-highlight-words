@@ -1,8 +1,8 @@
-import { CSSProperties, FC, useMemo } from 'react';
+import { CSSProperties, FC, Fragment, useMemo } from 'react';
 import TextMatcher from '@shhhplus/react-text-matcher';
 
 type HighlightWordsProps = {
-  words: string | string[];
+  words: string | RegExp | (string | RegExp)[];
   style?: CSSProperties;
   children: string;
 };
@@ -14,24 +14,42 @@ const HighlightWordsInner: FC<HighlightWordsProps> = ({
   style,
   children,
 }) => {
-  const rules = useMemo(() => {
+  const { rules, render } = useMemo(() => {
     const style2use = style || _globalStyle;
-    if (!style2use) {
-      return [];
-    }
+    const render = (word: string) => {
+      return <mark style={style2use}>{word}</mark>;
+    };
 
-    const list = typeof words === 'string' ? [words] : words;
-    return list.map((word) => {
+    if (style2use) {
       return {
-        pattern: word,
-        render: (word: string) => {
-          return <mark style={style2use}>{word}</mark>;
-        },
+        rules: words,
+        render,
       };
-    });
+    } else {
+      return {
+        rules: [],
+        render,
+      };
+    }
   }, [words, style]);
 
-  return <TextMatcher rules={rules}>{children}</TextMatcher>;
+  return (
+    <TextMatcher rules={rules} text={children}>
+      {(nodes) => {
+        return (
+          <Fragment>
+            {nodes.map((node, idx) => {
+              return (
+                <Fragment key={idx}>
+                  {typeof node === 'string' ? node : render(node.text)}
+                </Fragment>
+              );
+            })}
+          </Fragment>
+        );
+      }}
+    </TextMatcher>
+  );
 };
 
 const HighlightWords = HighlightWordsInner as typeof HighlightWordsInner & {
